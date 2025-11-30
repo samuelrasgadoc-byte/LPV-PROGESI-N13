@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Suite Educativa: Progresión 13 [LPV 5D]</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#020617', // Slate 950 ultra dark
+                        surface: '#0f172a',
+                        primary: '#3b82f6', // Blue
+                        secondary: '#8b5cf6', // Violet
+                        accent: '#06b6d4', // Cyan
+                        success: '#10b981',
+                        warning: '#f59e0b',
+                        danger: '#ef4444',
+                        'neon-blue': '#00f3ff',
+                        'neon-purple': '#bc13fe',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        tech: ['Orbitron', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'grid-move': 'grid-move 40s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        'grid-move': {
+                            '0%': { backgroundPosition: '0 0' },
+                            '100%': { backgroundPosition: '50px 50px' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;500;700;900&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+        /* --- CORE CSS --- */
+        body {
+            background-color: #020617;
+            color: #e2e8f0;
+            font-family: 'Outfit', sans-serif;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Scrollbar Premium */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+
+        /* Glassmorphism Classes */
+        .glass {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .glass-panel {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.4), rgba(15, 23, 42, 0.6));
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.3s ease;
+        }
+        .glass-panel:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Cyber Grid Background */
+        .cyber-grid {
+            background-image: 
+                linear-gradient(rgba(6, 182, 212, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+            z-index: -1;
+        }
+
+        /* View Transitions */
+        .view-section {
+            display: none;
+            opacity: 0;
+            transform: scale(0.98);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+        }
+        .view-section.active {
+            display: block;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Circuit SVG Styles */
+        .circuit-path {
+            stroke: #334155;
+            stroke-width: 4;
+            stroke-linecap: round;
+            fill: none;
+            transition: stroke 0.3s, filter 0.3s;
+        }
+        .circuit-path.active {
+            stroke: #06b6d4; /* Accent color */
+            filter: drop-shadow(0 0 4px #06b6d4);
+        }
+        .bulb-glow {
+            fill: #fbbf24;
+            filter: drop-shadow(0 0 0px #fbbf24);
+            opacity: 0.1;
+            transition: all 0.3s;
+        }
+        .bulb-glow.on { 
+            opacity: 1; 
+            filter: drop-shadow(0 0 20px #fbbf24);
+        }
+
+        /* Wave Animation for AC/DC */
+        @keyframes dash {
+            to { stroke-dashoffset: -100; }
+        }
+        .wave-line {
+            stroke-dasharray: 5;
+            animation: dash 2s linear infinite;
+        }
+
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px; width: 16px;
+            border-radius: 50%;
+            background: #fff;
+            border: 2px solid #3b82f6;
+            margin-top: -6px;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 4px;
+            background: #334155;
+            border-radius: 2px;
+        }
+        
+        /* Modal */
+        .modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .modal.open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden selection:bg-accent selection:text-white">
+
+    <div class="fixed inset-0 cyber-grid animate-grid-move"></div>
+    <div class="fixed top-[-20%] left-[-10%] w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="fixed bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <aside class="w-72 glass border-r border-slate-800 hidden lg:flex flex-col z-50">
+        <div class="p-6 border-b border-slate-800/50">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
+                    <span class="font-tech font-bold text-white text-lg">T</span>
+                </div>
+                <div>
+                    <h1 class="font-tech font-bold text-lg text-white tracking-wide">LPV 5D</h1>
+                    <span class="text-[10px] font-bold text-accent bg-accent/10 px-2 py-0.5 rounded border border-accent/20">PROGRESIÓN-13</span>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 rounded-lg p-3 border border-slate-800">
+                <div class="flex justify-between text-xs mb-1">
+                    <span class="text-slate-400">Rango</span>
+                    <span class="text-primary font-bold" id="userLevel">Novato</span>
+                </div>
+                <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                    <div id="xpBar" class="h-full bg-gradient-to-r from-primary to-accent w-[0%]" style="transition: width 1s;"></div>
+                </div>
+                <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+                    <span id="xpCurrent">0 XP</span>
+                    <span>1000 XP</span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-1" id="mainNav">
+            </nav>
+
+        <div class="p-4 border-t border-slate-800/50">
+            <div class="flex items-center gap-2 text-xs text-slate-500">
+                <div class="w-2 h-2 rounded-full bg-success animate-pulse"></div>
+                <span>CBTIS 213-5D</span>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col relative z-10 h-full overflow-hidden">
+        
+        <header class="lg:hidden glass border-b border-slate-800 p-4 flex justify-between items-center z-50">
+            <div class="flex items-center gap-2">
+                <span class="font-tech font-bold text-lg text-white">TITANIUM</span>
+            </div>
+            <button id="mobileMenuBtn" class="text-slate-300"><svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+        </header>
+
+        <div id="viewport" class="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-8 lg:p-12 scroll-smooth relative">
+
+            <section id="view-dashboard" class="view-section active max-w-7xl mx-auto text-center py-10">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold tracking-[0.2em] mb-6 animate-float">
+                    PROGRESIÓN 13
+                </div>
+                <h1 class="text-5xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-500 mb-6 font-tech tracking-tighter drop-shadow-2xl">
+                    HACKEA LA<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">ELECTRICIDAD</span>
+                </h1>
+                
+                <blockquote class="text-xl md:text-2xl text-slate-300 italic max-w-3xl mx-auto mb-6 font-light border-l-4 border-accent pl-6 py-2 bg-slate-900/30 rounded-r-lg">
+                    "La teoría surge del experimento y retorna a él."
+                    <footer class="text-sm text-slate-500 mt-2 not-italic font-bold tracking-widest uppercase">— Paul Drude</footer>
+                </blockquote>
+
+                <p class="text-sm md:text-base text-slate-400 max-w-2xl mx-auto mb-8 leading-relaxed">
+                    La energía se transfiere mediante corrientes eléctricas para producir movimiento, sonido, luz o calor. Comprendemos que la energía se conserva y fluye de sistemas de mayor a menor potencial.
+                </p>
+                
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button onclick="nav.goto('concepts')" class="px-8 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition-all border border-slate-700 flex items-center gap-2">
+                        <span class="text-xl">🧠</span> Conceptos Clave
+                    </button>
+                    <button onclick="nav.goto('origin')" class="px-8 py-3 bg-primary hover:bg-blue-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-primary/25 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        Comenzar
+                    </button>
+                    <button onclick="document.getElementById('modalCurriculum').classList.add('open')" class="px-8 py-3 glass hover:bg-slate-800 text-white font-bold rounded-xl transition-all border border-slate-700">
+                        Metas
+                    </button>
+                </div>
+            </section>
+            
+            <section id="view-concepts" class="view-section max-w-6xl mx-auto">
+                <div class="mb-8 border-b border-slate-800 pb-4">
+                    <span class="text-accent font-mono text-xs font-bold tracking-widest uppercase">BASE TEÓRICA</span>
+                    <h2 class="text-4xl font-bold text-white mt-1">Conceptos y Curiosidades</h2>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+                    <!-- Concept Cards -->
+                    <div class="glass-panel p-6 rounded-xl border-t-4 border-primary hover:-translate-y-1 transition-transform">
+                        <div class="text-3xl mb-2">🌊</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Corriente (I)</h3>
+                        <p class="text-sm text-slate-400">Flujo de carga eléctrica. Se mide en <strong class="text-white">Amperes (A)</strong> = Coulombs/segundo.</p>
+                    </div>
+                    
+                    <div class="glass-panel p-6 rounded-xl border-t-4 border-secondary hover:-translate-y-1 transition-transform">
+                        <div class="text-3xl mb-2">🔋</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Voltaje (V)</h3>
+                        <p class="text-sm text-slate-400">Energía potencial por unidad de carga. Impulso que mueve electrones. <strong class="text-white">Volts (V)</strong> = Joules/Coulomb.</p>
+                    </div>
+                    
+                    <div class="glass-panel p-6 rounded-xl border-t-4 border-warning hover:-translate-y-1 transition-transform">
+                        <div class="text-3xl mb-2">🧱</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Resistencia (R)</h3>
+                        <p class="text-sm text-slate-400">Oposición al flujo de corriente. Causa calentamiento. Se mide en <strong class="text-white">Ohms (Ω)</strong>.</p>
+                    </div>
+                    
+                    <div class="glass-panel p-6 rounded-xl border-t-4 border-danger hover:-translate-y-1 transition-transform">
+                        <div class="text-3xl mb-2">⚡</div>
+                        <h3 class="text-lg font-bold text-white mb-2">Potencia (P)</h3>
+                        <p class="text-sm text-slate-400">Rapidez con que se consume o produce energía. <strong class="text-white">Watts (W)</strong> = Joules/segundo.</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="glass-panel p-8 rounded-2xl bg-slate-900/50">
+                        <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                            <span class="text-accent">💡</span> Datos Interesantes
+                        </h3>
+                        <ul class="space-y-4">
+                            <li class="flex gap-3">
+                                <span class="text-slate-500 font-mono">01</span>
+                                <p class="text-sm text-slate-300">
+                                    <strong class="text-white block">La Tortuga y la Liebre</strong>
+                                    La señal eléctrica viaja casi a la velocidad de la luz, pero los electrones individuales se mueven muy lento (mm/s), esto se llama "velocidad de deriva".
+                                </p>
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="text-slate-500 font-mono">02</span>
+                                <p class="text-sm text-slate-300">
+                                    <strong class="text-white block">Resistencia Humana</strong>
+                                    El cuerpo humano seco tiene una resistencia de ~100,000 Ω, pero mojado baja drásticamente a ~1,000 Ω, haciéndolo muy conductor.
+                                </p>
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="text-slate-500 font-mono">03</span>
+                                <p class="text-sm text-slate-300">
+                                    <strong class="text-white block">El Rayo</strong>
+                                    Un rayo puede tener un voltaje de 100 millones de voltios y calentar el aire a 30,000°C (5 veces más caliente que el sol).
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="glass-panel p-8 rounded-2xl bg-gradient-to-br from-slate-900 to-indigo-950/30">
+                        <h3 class="text-xl font-bold text-white mb-4">¿Sabías qué?</h3>
+                        <div class="bg-black/30 p-4 rounded-lg border border-white/5 mb-4">
+                            <h4 class="font-bold text-indigo-400 text-sm mb-1">Superconductores</h4>
+                            <p class="text-xs text-slate-400">
+                                Algunos materiales a temperaturas extremas (-200°C) pierden TODA resistencia eléctrica. La corriente podría fluir eternamente sin batería.
+                            </p>
+                        </div>
+                        <div class="bg-black/30 p-4 rounded-lg border border-white/5">
+                            <h4 class="font-bold text-indigo-400 text-sm mb-1">Batería de Bagdad</h4>
+                            <p class="text-xs text-slate-400">
+                                Se han encontrado vasijas de hace 2000 años que parecen ser baterías primitivas usadas posiblemente para galvanizar oro.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-origin" class="view-section max-w-6xl mx-auto">
+                <div class="mb-8 border-b border-slate-800 pb-4">
+                    <span class="text-success font-mono text-xs font-bold tracking-widest uppercase">MÓDULO 01</span>
+                    <h2 class="text-4xl font-bold text-white mt-1">Fuente Electromotriz (FEM)</h2>
+                </div>
+                <div class="grid lg:grid-cols-2 gap-10">
+                    <div class="glass-panel p-8 rounded-2xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-success/10 rounded-full blur-3xl"></div>
+                        <h3 class="text-2xl font-bold text-white mb-4">Energía Química a Eléctrica</h3>
+                        <p class="text-slate-300 mb-6 leading-relaxed text-sm">
+                            Las pilas son fuentes de FEM porque transforman energía no eléctrica en energía eléctrica. Aunque el término "fuerza" es histórico y técnicamente obsoleto (no es una fuerza newtoniana), seguimos usando FEM para referirnos al trabajo realizado para mover una carga positiva hacia un punto de potencial alto.
+                        </p>
+
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-700">
+                                <h4 class="text-success font-bold text-xs uppercase mb-1">Convención</h4>
+                                <p class="text-[10px] text-slate-400">La corriente fluye de (+) a (-), aunque los electrones se muevan al revés en metales.</p>
+                            </div>
+                            <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-700">
+                                <h4 class="text-warning font-bold text-xs uppercase mb-1">Experimento</h4>
+                                <p class="text-[10px] text-slate-400">¡Puedes crear una batería usando un limón y electrodos de cobre y zinc! (Aprox 1V).</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-center glass-panel p-8 rounded-2xl bg-slate-900/50">
+                        <div class="relative w-32 h-56 bg-gradient-to-b from-slate-700 to-slate-800 rounded-xl border-4 border-slate-600 shadow-2xl flex items-center justify-center">
+                            <div class="absolute -top-3 w-12 h-4 bg-slate-500 rounded-t-sm"></div>
+                            <div class="absolute inset-2 border border-white/5 rounded-lg overflow-hidden">
+                                <div class="w-full h-full bg-gradient-to-t from-success/20 to-transparent animate-pulse"></div>
+                                <div class="absolute top-4 left-0 right-0 text-center text-xs font-mono text-white/50">FEM = J/C</div>
+                                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-success font-black text-4xl opacity-30">⚡</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-conductivity" class="view-section max-w-6xl mx-auto">
+                <div class="mb-8 border-b border-slate-800 pb-4 flex justify-between items-end">
+                    <div>
+                        <span class="text-accent font-mono text-xs font-bold tracking-widest uppercase">MÓDULO 02</span>
+                        <h2 class="text-4xl font-bold text-white mt-1">Conductividad</h2>
+                    </div>
+                    <div id="circuitStatus" class="text-danger font-mono font-bold text-xl">ABIERTO</div>
+                </div>
+                <div class="grid lg:grid-cols-3 gap-6">
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <h3 class="text-sm font-bold text-slate-400 uppercase mb-4">Materiales de Prueba</h3>
+                        <div class="grid grid-cols-2 gap-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar" id="materialsGrid">
+                            </div>
+                        <p class="text-xs text-slate-500 mt-4 italic">Selecciona un material. Observa cómo el agua pura no conduce, pero al añadir sales (iones) sí lo hace.</p>
+                    </div>
+                    <div class="lg:col-span-2 glass-panel p-0 rounded-2xl relative bg-slate-900 flex items-center justify-center min-h-[350px]">
+                        <svg class="w-full h-full absolute inset-0 p-8" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">
+                            <rect x="20" y="100" width="30" height="50" fill="#334155" rx="2" />
+                            <text x="25" y="130" font-size="10" fill="white" font-weight="bold">9V</text>
+                            <g transform="translate(350, 125)">
+                                <circle cx="0" cy="0" r="20" fill="#334155" id="bulbBody" />
+                                <circle cx="0" cy="0" r="20" class="bulb-glow" id="bulbLight" />
+                            </g>
+                            <path d="M 50 100 L 50 40 L 140 40" class="circuit-path" id="w1" />
+                            <path d="M 260 40 L 350 40 L 350 105" class="circuit-path" id="w2" />
+                            <path d="M 350 145 L 350 260 L 35 260 L 35 150" class="circuit-path" id="w3" />
+                            <rect x="140" y="20" width="120" height="40" fill="none" stroke="#475569" stroke-dasharray="4" rx="4" />
+                            <text x="200" y="45" text-anchor="middle" font-size="8" fill="#64748b" class="font-mono">ZONA DE PRUEBA</text>
+                        </svg>
+                        <div id="testLabel" class="absolute top-[35px] bg-slate-800 border border-slate-600 px-3 py-1 rounded text-xs text-white shadow-lg opacity-0 transition-opacity">
+                            Vacío
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-resistance" class="view-section max-w-6xl mx-auto">
+                <div class="mb-8 border-b border-slate-800 pb-4">
+                    <span class="text-danger font-mono text-xs font-bold tracking-widest uppercase">MÓDULO 03</span>
+                    <h2 class="text-4xl font-bold text-white mt-1">Arquitectura de Cables</h2>
+                </div>
+                <div class="grid lg:grid-cols-2 gap-10">
+                    <div class="glass-panel p-8 rounded-2xl">
+                        <div class="mb-6">
+                            <label class="text-xs font-bold text-slate-400 uppercase mb-2 block">Material (Resistividad ρ)</label>
+                            <select id="resMatSelect" class="w-full bg-slate-900 border border-slate-700 text-white p-3 rounded-lg focus:border-danger outline-none" onchange="resLab.update()">
+                                </select>
+                            <p class="text-[10px] text-slate-500 mt-1">Datos basados en tabla de resistividad a 20°C</p>
+                        </div>
+                        <div class="space-y-6">
+                            <div>
+                                <div class="flex justify-between text-xs font-bold text-slate-400 mb-2">
+                                    <span>LONGITUD (L)</span> <span id="resLenVal" class="text-white">10 m</span>
+                                </div>
+                                <input type="range" id="resLen" min="1" max="100" value="10" oninput="resLab.update()">
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-bold text-slate-400 mb-2">
+                                    <span>ÁREA (A)</span> <span id="resAreaVal" class="text-white">2 mm²</span>
+                                </div>
+                                <input type="range" id="resArea" min="0.1" max="10" step="0.1" value="2" oninput="resLab.update()">
+                            </div>
+                        </div>
+                        <div class="mt-8 bg-slate-900 rounded-xl p-6 text-center border border-slate-800 relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-20 h-20 bg-danger/10 rounded-full blur-xl"></div>
+                            <span class="text-[10px] text-slate-500 uppercase tracking-widest">Resistencia (Ω)</span>
+                            <div id="resResult" class="text-5xl font-mono font-bold text-white mt-2">0.00</div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-panel p-8 rounded-2xl flex flex-col justify-center items-center bg-slate-900/50">
+                        <div class="w-full bg-blue-900/20 p-4 rounded-lg border border-blue-500/30 mb-6">
+                            <h4 class="text-blue-400 font-bold text-sm mb-1">⚡ Superconductores (HTS)</h4>
+                            <p class="text-xs text-slate-400 leading-tight">
+                                Tienen resistencia CERO. En teoría, un anillo superconductor podría transportar corriente para siempre sin fuente de poder. Se usan en trenes Maglev y máquinas MRI.
+                            </p>
+                        </div>
+
+                        <p class="text-xs text-slate-500 mb-4 uppercase tracking-widest">Analogía Hidráulica</p>
+                        <div class="relative flex items-center justify-center mb-4">
+                            <div id="vizWire" class="rounded-full bg-slate-700 transition-all duration-300 flex items-center justify-center shadow-lg" style="width: 50px; height: 50px;">
+                                <div id="vizCore" class="rounded-full bg-orange-500 transition-all duration-300 w-full h-full opacity-80"></div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-400 text-center max-w-sm">
+                            <span class="text-danger font-bold">R = ρ · L / A</span><br>
+                            Imagina una tubería: <br>
+                            Más larga = Más fricción (Mayor R)<br>
+                            Más ancha = Más fácil fluir (Menor R)
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-drude" class="view-section max-w-6xl mx-auto">
+                <div class="mb-8 border-b border-slate-800 pb-4 flex justify-between items-end">
+                    <div>
+                        <span class="text-warning font-mono text-xs font-bold tracking-widest uppercase">MÓDULO 04</span>
+                        <h2 class="text-4xl font-bold text-white mt-1">Modelo de Drude</h2>
+                    </div>
+                    <button onclick="drudeSim.toggle()" id="drudeBtn" class="px-4 py-2 bg-slate-800 text-xs font-bold rounded border border-slate-700 hover:bg-slate-700 transition-colors">PAUSAR</button>
+                </div>
+                <div class="glass-panel rounded-2xl p-1 relative overflow-hidden border border-slate-700">
+                    <div class="absolute top-4 left-4 z-20 flex flex-col gap-2 p-3 bg-slate-900/90 backdrop-blur rounded-lg border border-slate-700 shadow-xl">
+                        <div>
+                            <label class="text-[10px] text-slate-400 uppercase font-bold">Temperatura (Agitación)</label>
+                            <input type="range" id="drudeTemp" min="0" max="100" value="20" class="block w-32" oninput="drudeSim.updateParams()">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-400 uppercase font-bold">Voltaje (Campo E)</label>
+                            <input type="range" id="drudeVolt" min="0" max="50" value="10" class="block w-32" oninput="drudeSim.updateParams()">
+                        </div>
+                    </div>
+                    
+                    <canvas id="drudeCanvas" class="w-full h-[450px] bg-[#020617] cursor-crosshair"></canvas>
+                    
+                    <div class="absolute bottom-4 right-4 bg-slate-900/80 px-4 py-2 rounded border border-slate-700 text-right">
+                        <div class="text-[10px] text-slate-500 uppercase">Velocidad de Arrastre</div>
+                        <div id="drudeDrift" class="text-xl font-mono text-white">0.00 mm/s</div>
+                        <div class="text-[10px] text-slate-500 mt-1">Electrones deslocalizados</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-machines" class="view-section max-w-6xl mx-auto">
+                <div class="mb-8 border-b border-slate-800 pb-4">
+                    <span class="text-neon-purple font-mono text-xs font-bold tracking-widest uppercase">MÓDULO 05</span>
+                    <h2 class="text-4xl font-bold text-white mt-1">Generadores y Motores</h2>
+                </div>
+                
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <!-- AC vs DC -->
+                    <div class="glass-panel p-8 rounded-2xl">
+                        <h3 class="text-xl font-bold text-white mb-4">Tipos de Corriente</h3>
+                        <div class="space-y-6">
+                            <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-700">
+                                <div class="flex justify-between items-center mb-2">
+                                    <h4 class="text-primary font-bold">Corriente Directa (CD/DC)</h4>
+                                    <span class="text-xs bg-primary/20 text-primary px-2 rounded">Pilas/Baterías</span>
+                                </div>
+                                <div class="h-16 relative border-l border-b border-slate-600">
+                                    <div class="absolute top-4 left-0 right-0 h-0.5 bg-primary"></div>
+                                    <span class="absolute -left-4 top-4 text-[10px] text-slate-500">V</span>
+                                    <span class="absolute right-0 -bottom-4 text-[10px] text-slate-500">t</span>
+                                </div>
+                                <p class="text-xs text-slate-400 mt-4">El flujo es constante en una sola dirección.</p>
+                            </div>
+
+                            <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-700">
+                                <div class="flex justify-between items-center mb-2">
+                                    <h4 class="text-neon-purple font-bold">Corriente Alterna (CA/AC)</h4>
+                                    <span class="text-xs bg-neon-purple/20 text-neon-purple px-2 rounded">CFE (60Hz)</span>
+                                </div>
+                                <div class="h-16 relative border-l border-b border-slate-600 flex items-center">
+                                    <svg class="w-full h-full overflow-visible">
+                                        <path d="M0,32 Q25,0 50,32 T100,32 T150,32" fill="none" stroke="#bc13fe" stroke-width="2" class="wave-line" />
+                                    </svg>
+                                    <span class="absolute -left-4 top-0 text-[10px] text-slate-500">+</span>
+                                    <span class="absolute -left-4 bottom-0 text-[10px] text-slate-500">-</span>
+                                </div>
+                                <p class="text-xs text-slate-400 mt-4">La dirección se invierte periódicamente (60 veces/seg en México). Se produce en generadores rotativos.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Motor vs Generator -->
+                    <div class="glass-panel p-8 rounded-2xl flex flex-col justify-center">
+                        <h3 class="text-xl font-bold text-white mb-6">Reversibilidad</h3>
+                        
+                        <div class="relative grid grid-cols-2 gap-4 text-center">
+                            <!-- Motor -->
+                            <div class="p-4 border border-slate-700 rounded-xl hover:bg-slate-800 transition-colors group">
+                                <div class="text-4xl mb-2 group-hover:scale-110 transition-transform">⚙️</div>
+                                <h4 class="font-bold text-white">Motor</h4>
+                                <div class="text-xs text-slate-400 my-2">Entra Electricidad → Sale Movimiento</div>
+                                <div class="w-full h-1 bg-gradient-to-r from-yellow-400 to-slate-600 rounded"></div>
+                            </div>
+
+                            <!-- Generator -->
+                            <div class="p-4 border border-slate-700 rounded-xl hover:bg-slate-800 transition-colors group">
+                                <div class="text-4xl mb-2 group-hover:scale-110 transition-transform">🧲</div>
+                                <h4 class="font-bold text-white">Generador</h4>
+                                <div class="text-xs text-slate-400 my-2">Entra Movimiento → Sale Electricidad</div>
+                                <div class="w-full h-1 bg-gradient-to-r from-slate-600 to-yellow-400 rounded"></div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 p-4 bg-red-900/20 border border-red-500/30 rounded-xl">
+                            <h4 class="text-red-400 font-bold text-sm mb-1">⚠️ Excepción: El Foco</h4>
+                            <p class="text-xs text-slate-300">
+                                Un foco de filamento es <strong>irreversible</strong>. La electricidad produce calor/luz, pero calentar el foco NO produce electricidad.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-joule" class="view-section max-w-5xl mx-auto">
+                <div class="mb-8 border-b border-slate-800 pb-4">
+                    <span class="text-secondary font-mono text-xs font-bold tracking-widest uppercase">MÓDULO 06</span>
+                    <h2 class="text-4xl font-bold text-white mt-1">Costo y Potencia (Ley de Joule)</h2>
+                </div>
+                <div class="glass-panel p-8 rounded-2xl border-l-4 border-secondary">
+                    <div class="mb-4">
+                        <p class="text-sm text-slate-300">La potencia eléctrica ($P=I^2R$) mide la rapidez con la que se efectúa un trabajo eléctrico.</p>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-10">
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-400 uppercase mb-4">Selecciona Dispositivo</h3>
+                            <div class="grid grid-cols-2 gap-3" id="jouleDevices">
+                                </div>
+                            <div class="mt-6">
+                                <div class="flex justify-between text-xs font-bold text-slate-400 mb-2">
+                                    <span>HORAS DE USO (Mes)</span> <span id="jouleHoursVal" class="text-secondary">30h</span>
+                                </div>
+                                <input type="range" id="jouleHours" min="1" max="720" value="30" oninput="jouleLab.update()" class="w-full">
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-center items-center bg-slate-900 rounded-xl p-8 text-center border border-slate-800">
+                            <span class="text-xs text-slate-500 uppercase tracking-widest">Costo Mensual Estimado</span>
+                            <div class="text-6xl font-mono font-black text-white mt-2 flex items-start gap-1">
+                                <span class="text-xl text-slate-500 mt-2">$</span>
+                                <span id="jouleCost">0.00</span>
+                            </div>
+                            <div class="mt-6 flex gap-4 w-full">
+                                <div class="flex-1 bg-slate-800/50 p-2 rounded">
+                                    <div class="text-[10px] text-slate-500">CONSUMO</div>
+                                    <div id="jouleKwh" class="text-white font-mono">0 kWh</div>
+                                </div>
+                                <div class="flex-1 bg-slate-800/50 p-2 rounded">
+                                    <div class="text-[10px] text-slate-500">CALOR (JOULES)</div>
+                                    <div id="jouleHeat" class="text-warning font-mono">0 J</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-history" class="view-section max-w-4xl mx-auto">
+                <div class="mb-12 text-center">
+                    <span class="text-slate-500 font-mono text-xs font-bold tracking-widest uppercase">CRONOLOGÍA</span>
+                    <h2 class="text-4xl font-bold text-white mt-1">Gigantes de la Electricidad</h2>
+                </div>
+                <div class="relative border-l-2 border-slate-700 ml-4 md:ml-0 md:border-l-0">
+                    <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-700 -translate-x-1/2"></div>
+                    <div id="historyContainer" class="space-y-12">
+                        </div>
+                </div>
+            </section>
+
+            <section id="view-quiz" class="view-section max-w-3xl mx-auto text-center">
+                <div class="mb-10">
+                    <span class="text-neon-blue font-bold tracking-[0.2em] text-xs animate-pulse">EVALUACIÓN</span>
+                    <h2 class="text-4xl font-black text-white mt-2">Desafío Final</h2>
+                </div>
+                <div class="glass-panel p-8 rounded-3xl relative overflow-hidden min-h-[400px] flex flex-col justify-center">
+                    <div id="quizGameArea">
+                        <div class="mb-6">
+                            <span class="text-xs text-slate-500 font-mono">PREGUNTA <span id="qIndex">1</span></span>
+                            <h3 id="qText" class="text-2xl font-bold text-white mt-2">Cargando...</h3>
+                        </div>
+                        <div id="qOptions" class="grid gap-3 max-w-md mx-auto"></div>
+                        <div id="qFeedback" class="hidden mt-4 font-bold p-3 rounded-lg"></div>
+                    </div>
+                    
+                    <div id="quizResultArea" class="hidden absolute inset-0 bg-slate-900 z-10 flex flex-col items-center justify-center p-8">
+                        <div class="text-6xl mb-4">🏆</div>
+                        <h3 class="text-3xl font-bold text-white mb-2">¡Completado!</h3>
+                        <p class="text-slate-400 mb-6" id="finalXP">Has ganado 0 XP</p>
+                        <button onclick="quiz.reset()" class="px-6 py-2 bg-slate-800 rounded-full border border-slate-700 text-white hover:bg-slate-700">Reiniciar</button>
+                    </div>
+                </div>
+            </section>
+
+            <div class="h-20"></div>
+        </div>
+    </main>
+
+    <!-- CURRICULUM MODAL -->
+    <div id="modalCurriculum" class="modal fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="this.parentElement.classList.remove('open')"></div>
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto relative p-8 shadow-2xl">
+            <button onclick="this.closest('.modal').classList.remove('open')" class="absolute top-4 right-4 text-slate-400 hover:text-white">✕</button>
+            
+            <h2 class="text-2xl font-bold text-white mb-6 border-b border-slate-700 pb-2">Alineación de la Progresión 13</h2>
+            
+            <div class="space-y-6 text-sm text-slate-300">
+                <div>
+                    <h3 class="text-primary font-bold uppercase text-xs mb-2">Aprendizaje de Trayectoria</h3>
+                    <p>Las y los estudiantes comprenden que la conservación de la energía es un principio que aplica a todos los fenómenos naturales. Reconocen los mecanismos de transferencia y flujo de energía (de mayor a menor temperatura).</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-secondary font-bold uppercase text-xs mb-2">Metas de Aprendizaje</h3>
+                    <ul class="list-disc pl-4 space-y-1 marker:text-secondary">
+                        <li>Comprender la "producción de energía" como conversión de energía almacenada.</li>
+                        <li>Identificar modelos matemáticos para predecir efectos de fuerzas.</li>
+                        <li>Comprender que la transferencia de energía entre objetos que colisionan sucede al ejercer fuerza.</li>
+                        <li>Utilizar el conocimiento estructural de los materiales para comprender sus alteraciones.</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-accent font-bold uppercase text-xs mb-2">Conceptos Transversales</h3>
+                    <div class="flex gap-2 flex-wrap">
+                        <span class="bg-accent/10 text-accent px-2 py-1 rounded text-xs border border-accent/20">CT1. Patrones</span>
+                        <span class="bg-accent/10 text-accent px-2 py-1 rounded text-xs border border-accent/20">CT4. Sistemas</span>
+                        <span class="bg-accent/10 text-accent px-2 py-1 rounded text-xs border border-accent/20">CT5. Flujos y Ciclos</span>
+                        <span class="bg-accent/10 text-accent px-2 py-1 rounded text-xs border border-accent/20">CT6. Estructura y Función</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA ---
+        const DB = {
+            // Updated with specific values from PDF (Page 8)
+            materials: [
+                { id: 'silver', name: 'Plata', rho: 1.62e-8, color: '#e2e8f0', type: 'conductor', icon: '🥈' },
+                { id: 'copper', name: 'Cobre', rho: 1.69e-8, color: '#f97316', type: 'conductor', icon: '🟧' },
+                { id: 'gold', name: 'Oro', rho: 2.44e-8, color: '#facc15', type: 'conductor', icon: '👑' },
+                { id: 'aluminum', name: 'Aluminio', rho: 2.75e-8, color: '#94a3b8', type: 'conductor', icon: '⚙️' },
+                { id: 'graphite', name: 'Grafito', rho: 3.5e-5, color: '#374151', type: 'conductor', icon: '✏️' },
+                { id: 'water_salt', name: 'Agua Salada', rho: 0.2, color: '#0ea5e9', type: 'conductor', icon: '🧂' },
+                { id: 'water_tap', name: 'Agua de Grifo', rho: 20, color: '#7dd3fc', type: 'conductor', icon: '🚰' }, // Weak conductor
+                { id: 'water_distilled', name: 'Agua Desmineralizada', rho: 1e5, color: '#e0f2fe', type: 'insulator', icon: '💧' },
+                { id: 'tungsten', name: 'Tungsteno', rho: 5.25e-8, color: '#475569', type: 'conductor', icon: '💡' },
+                { id: 'iron', name: 'Hierro', rho: 9.68e-8, color: '#78716c', type: 'conductor', icon: '🔩' },
+                { id: 'nichrome', name: 'Nicromo', rho: 1.2e-6, color: '#ef4444', type: 'conductor', icon: '🔥' }, 
+                { id: 'wood', name: 'Madera', rho: 1e10, color: '#a8a29e', type: 'insulator', icon: '🪵' }, 
+                { id: 'glass', name: 'Vidrio', rho: 1e12, color: '#bae6fd', type: 'insulator', icon: '🪟' },
+                { id: 'rubber', name: 'Goma', rho: 1e13, color: '#1f2937', type: 'insulator', icon: '👟' },
+                { id: 'plastic', name: 'Plástico', rho: 1e15, color: '#f472b6', type: 'insulator', icon: '🥤' }
+            ],
+            history: [
+                { year: 1800, name: 'Alessandro Volta', title: 'Pila Voltaica', desc: 'Primera fuente constante de corriente continua.' },
+                { year: 1827, name: 'Georg Ohm', title: 'Ley de Ohm', desc: 'Relación fundamental V = I · R.' },
+                { year: 1840, name: 'James Joule', title: 'Efecto Joule', desc: 'Transformación de electricidad en calor (P = I²R).' },
+                { year: 1900, name: 'Paul Drude', title: 'Modelo Drude', desc: 'Teoría cinética de los electrones en metales.' }
+            ],
+            devices: [
+                { name: 'LED', w: 10 }, { name: 'Foco 40W', w: 40 }, { name: 'Laptop', w: 60 }, { name: 'Refri', w: 400 }, { name: 'Aire Acond.', w: 2000 }
+            ],
+            // Updated Quiz questions based on PDF text
+            quiz: [
+                { q: "¿Qué unidad mide la FEM?", opts: ["Newton", "Volt (Joules/Coulomb)", "Joule"], a: 1 },
+                { q: "¿Qué dice la convención sobre la dirección de la corriente?", opts: ["Sigue a los electrones", "De Positivo a Negativo", "Es aleatoria"], a: 1 },
+                { q: "¿A qué frecuencia opera la corriente alterna de CFE?", opts: ["50 Hz", "60 Hz", "100 Hz"], a: 1 },
+                { q: "Si calientas un foco de filamento, ¿se genera electricidad?", opts: ["Sí, es reversible", "No, es irreversible", "Solo si es LED"], a: 1 },
+                { q: "¿Qué hace un generador eléctrico?", opts: ["Convierte Movimiento en Electricidad", "Convierte Electricidad en Calor", "Almacena carga"], a: 0 },
+                { q: "¿Cuánto es la resistencia de un superconductor?", opts: ["Muy alta", "Cero", "Infinita"], a: 1 }
+            ]
+        };
+
+        // --- NAVIGATION & APP STATE ---
+        const nav = {
+            links: [
+                { id: 'dashboard', label: 'Inicio', icon: '🏠' },
+                { id: 'concepts', label: 'Conceptos', icon: '🧠' }, // New Link
+                { id: 'origin', label: 'Energía (FEM)', icon: '🔋' },
+                { id: 'conductivity', label: 'Conductividad', icon: '⚡' },
+                { id: 'resistance', label: 'Resistencia', icon: '📏' },
+                { id: 'drude', label: 'Simulador Drude', icon: '🔬' },
+                { id: 'machines', label: 'Máquinas', icon: '⚙️' }, 
+                { id: 'joule', label: 'Costo y Potencia', icon: '💰' },
+                { id: 'history', label: 'Historia', icon: '📜' },
+                { id: 'quiz', label: 'Evaluación', icon: '🎓' }
+            ],
+            xp: 0,
+
+            init() {
+                // Render Nav
+                const c = document.getElementById('mainNav');
+                this.links.forEach(l => {
+                    const btn = document.createElement('button');
+                    btn.className = `w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-all mb-1 text-slate-400 hover:bg-slate-800 hover:text-white nav-btn`;
+                    btn.innerHTML = `<span>${l.icon}</span> ${l.label}`;
+                    btn.dataset.target = l.id;
+                    btn.onclick = () => this.goto(l.id);
+                    c.appendChild(btn);
+                });
+                
+                // Load XP
+                const saved = localStorage.getItem('titanium_xp');
+                if(saved) {
+                    this.xp = parseInt(saved);
+                    this.updateXP(0);
+                }
+            },
+
+            goto(id) {
+                document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+                document.getElementById(`view-${id}`).classList.add('active');
+                
+                // Sidebar active state
+                document.querySelectorAll('.nav-btn').forEach(b => {
+                    b.classList.remove('bg-primary/10', 'text-primary');
+                    if(b.dataset.target === id) b.classList.add('bg-primary/10', 'text-primary');
+                });
+                
+                // Mobile close
+                const side = document.querySelector('aside');
+                if(!side.classList.contains('hidden') && window.innerWidth < 1024) {
+                    side.classList.add('hidden');
+                }
+
+                // Scroll reset
+                document.getElementById('viewport').scrollTo(0,0);
+            },
+
+            updateXP(amount) {
+                this.xp += amount;
+                localStorage.setItem('titanium_xp', this.xp);
+                document.getElementById('xpCurrent').innerText = this.xp + ' XP';
+                document.getElementById('xpBar').style.width = ((this.xp % 1000)/10) + '%';
+                
+                const lvl = document.getElementById('userLevel');
+                if(this.xp < 500) lvl.innerText = "Novato";
+                else if(this.xp < 1500) lvl.innerText = "Técnico";
+                else if(this.xp < 3000) lvl.innerText = "Ingeniero";
+                else lvl.innerText = "Maestro";
+            }
+        };
+
+        // --- MODULES ---
+
+        // 1. Conductivity
+        const conductLab = {
+            init() {
+                const g = document.getElementById('materialsGrid');
+                // Removed slice to show all materials
+                DB.materials.forEach(m => {
+                    const b = document.createElement('button');
+                    b.className = "p-3 bg-slate-800 rounded-lg border border-slate-700 hover:border-accent transition-all flex flex-col items-center gap-1 min-w-[100px]";
+                    b.innerHTML = `<span class="text-2xl">${m.icon}</span><span class="text-xs font-bold text-slate-300 text-center">${m.name}</span>`;
+                    b.onclick = () => this.test(m);
+                    g.appendChild(b);
+                });
+            },
+            test(m) {
+                const label = document.getElementById('testLabel');
+                const bulb = document.getElementById('bulbLight');
+                const paths = document.querySelectorAll('.circuit-path');
+                const status = document.getElementById('circuitStatus');
+
+                label.innerText = m.name;
+                label.style.opacity = 1;
+
+                // Reset
+                paths.forEach(p => p.classList.remove('active'));
+                bulb.classList.remove('on');
+                bulb.style.opacity = 0.1;
+
+                setTimeout(() => {
+                    if(m.type === 'conductor') {
+                        status.innerHTML = "<span class='text-success'>CERRADO</span>";
+                        paths.forEach(p => p.classList.add('active'));
+                        bulb.classList.add('on');
+                    } else {
+                        status.innerHTML = "<span class='text-danger'>ABIERTO</span>";
+                    }
+                }, 100);
+            }
+        };
+
+        // 2. Resistance (Architect)
+        const resLab = {
+            init() {
+                const s = document.getElementById('resMatSelect');
+                DB.materials.forEach(m => {
+                    // Only show valid materials for resistance lab (exclude pure insulators for range calc reasons or keep them for infinite resistance demo)
+                    if(m.rho < 1e5) { 
+                        const opt = document.createElement('option');
+                        opt.value = m.rho;
+                        opt.innerText = `${m.name} (${m.rho})`;
+                        s.appendChild(opt);
+                    }
+                });
+                this.update();
+            },
+            update() {
+                const rho = parseFloat(document.getElementById('resMatSelect').value);
+                const L = parseFloat(document.getElementById('resLen').value);
+                const A = parseFloat(document.getElementById('resArea').value);
+                
+                document.getElementById('resLenVal').innerText = L + ' m';
+                document.getElementById('resAreaVal').innerText = A + ' mm²';
+                
+                // Calc R (using actual formula now but careful with scientific notation display)
+                // R = rho * L / (A * 10^-6 for m^2)
+                const R = (rho * L) / (A * 1e-6); 
+                
+                let displayR = R.toFixed(4);
+                if(R > 1000) displayR = (R/1000).toFixed(2) + " k";
+
+                document.getElementById('resResult').innerText = displayR;
+
+                // Visuals
+                const core = document.getElementById('vizCore');
+                core.style.width = (A * 10) + '%';
+                core.style.height = (A * 10) + '%';
+                // Material Color
+                const mat = DB.materials.find(m => Math.abs(m.rho - rho) < 1e-20);
+                if(mat) core.style.backgroundColor = mat.color;
+            }
+        };
+
+        // 3. Drude Sim (Canvas)
+        const drudeSim = {
+            canvas: null, ctx: null, w:0, h:0,
+            electrons: [], atoms: [],
+            running: true, temp: 20, volt: 10,
+            
+            init() {
+                this.canvas = document.getElementById('drudeCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                
+                // Setup Atoms (Grid)
+                for(let y=0; y<6; y++) {
+                    for(let x=0; x<10; x++) {
+                        this.atoms.push({
+                            bx: x * (this.w/10) + 40, by: y * (this.h/6) + 40
+                        });
+                    }
+                }
+                // Setup Electrons
+                for(let i=0; i<30; i++) {
+                    this.electrons.push({
+                        x: Math.random()*this.w, y: Math.random()*this.h, vx:0, vy:0
+                    });
+                }
+                this.loop();
+            },
+            resize() {
+                this.w = this.canvas.parentElement.offsetWidth;
+                this.h = this.canvas.parentElement.offsetHeight;
+                this.canvas.width = this.w;
+                this.canvas.height = this.h;
+            },
+            updateParams() {
+                this.temp = parseInt(document.getElementById('drudeTemp').value);
+                this.volt = parseInt(document.getElementById('drudeVolt').value);
+            },
+            toggle() {
+                this.running = !this.running;
+                document.getElementById('drudeBtn').innerText = this.running ? 'PAUSAR' : 'REANUDAR';
+                if(this.running) this.loop();
+            },
+            loop() {
+                if(!this.running) return;
+                this.ctx.clearRect(0,0,this.w,this.h);
+
+                // Field
+                if(this.volt > 0) {
+                    const g = this.ctx.createLinearGradient(0,0,this.w,0);
+                    g.addColorStop(0, `rgba(6, 182, 212, 0)`);
+                    g.addColorStop(1, `rgba(6, 182, 212, ${this.volt/100})`);
+                    this.ctx.fillStyle = g;
+                    this.ctx.fillRect(0,0,this.w,this.h);
+                }
+
+                // Atoms
+                this.ctx.fillStyle = '#334155';
+                this.atoms.forEach(a => {
+                    const shake = this.temp * 0.05;
+                    const x = a.bx + (Math.random()-0.5)*shake;
+                    const y = a.by + (Math.random()-0.5)*shake;
+                    this.ctx.beginPath();
+                    this.ctx.arc(x,y, 5, 0, Math.PI*2);
+                    this.ctx.fill();
+                });
+
+                // Electrons
+                this.ctx.fillStyle = '#facc15';
+                let totalV = 0;
+                this.electrons.forEach(e => {
+                    e.vx += this.volt * 0.005; // Field accel
+                    // Thermal scattering
+                    if(Math.random() < (0.01 + this.temp*0.001)) {
+                        e.vx *= -0.5; e.vy *= -0.5;
+                    }
+                    e.x += e.vx;
+                    // Wrap
+                    if(e.x > this.w) e.x = 0;
+                    
+                    totalV += e.vx;
+                    this.ctx.beginPath();
+                    this.ctx.arc(e.x, e.y, 2, 0, Math.PI*2);
+                    this.ctx.fill();
+                });
+                
+                document.getElementById('drudeDrift').innerText = (totalV/30).toFixed(2) + ' mm/s';
+                requestAnimationFrame(() => this.loop());
+            }
+        };
+
+        // 4. Joule Lab
+        const jouleLab = {
+            currentW: 10,
+            init() {
+                const g = document.getElementById('jouleDevices');
+                DB.devices.forEach((d, idx) => {
+                    const b = document.createElement('button');
+                    b.className = `p-3 bg-slate-800 rounded-lg border border-slate-700 hover:border-secondary text-left ${idx===0?'ring-2 ring-secondary':''}`;
+                    b.innerHTML = `<div class="font-bold text-white">${d.name}</div><div class="text-xs text-slate-500">${d.w}W</div>`;
+                    b.onclick = (e) => {
+                        document.querySelectorAll('#jouleDevices button').forEach(x => x.classList.remove('ring-2', 'ring-secondary'));
+                        b.classList.add('ring-2', 'ring-secondary');
+                        this.currentW = d.w;
+                        this.update();
+                    };
+                    g.appendChild(b);
+                });
+                this.update();
+            },
+            update() {
+                const h = parseInt(document.getElementById('jouleHours').value);
+                document.getElementById('jouleHoursVal').innerText = h + 'h';
+                const kwh = (this.currentW * h) / 1000;
+                const cost = kwh * 2.5; // Dummy rate
+                const joules = this.currentW * h * 3600;
+
+                document.getElementById('jouleCost').innerText = cost.toFixed(2);
+                document.getElementById('jouleKwh').innerText = kwh.toFixed(2) + ' kWh';
+                document.getElementById('jouleHeat').innerText = joules.toExponential(1) + ' J';
+            }
+        };
+
+        // 5. History
+        const historyLab = {
+            init() {
+                const c = document.getElementById('historyContainer');
+                DB.history.forEach((h, idx) => {
+                    const d = document.createElement('div');
+                    d.className = "glass-panel p-6 rounded-xl border-l-4 border-primary relative md:w-3/4 md:mx-auto";
+                    d.innerHTML = `
+                        <span class="absolute -top-3 -right-2 bg-slate-900 px-2 py-1 text-xs font-mono border border-slate-700 rounded">${h.year}</span>
+                        <h3 class="text-lg font-bold text-white">${h.title}</h3>
+                        <p class="text-xs text-accent font-bold uppercase mb-2">${h.name}</p>
+                        <p class="text-sm text-slate-400">${h.desc}</p>
+                    `;
+                    c.appendChild(d);
+                });
+            }
+        };
+
+        // 6. Quiz
+        const quiz = {
+            curr: 0, score: 0,
+            init() { this.render(); },
+            render() {
+                const q = DB.quiz[this.curr];
+                document.getElementById('qIndex').innerText = this.curr + 1;
+                document.getElementById('qText').innerText = q.q;
+                const opts = document.getElementById('qOptions');
+                opts.innerHTML = '';
+                document.getElementById('qFeedback').className = "hidden mt-4 font-bold p-3 rounded-lg";
+                
+                q.opts.forEach((o, idx) => {
+                    const b = document.createElement('button');
+                    b.className = "w-full p-3 text-left bg-slate-800 rounded-lg hover:bg-slate-700 border border-slate-700 text-slate-300";
+                    b.innerText = o;
+                    b.onclick = () => this.check(idx, b);
+                    opts.appendChild(b);
+                });
+            },
+            check(idx, btn) {
+                const correct = DB.quiz[this.curr].a;
+                const fb = document.getElementById('qFeedback');
+                fb.classList.remove('hidden');
+                
+                if(idx === correct) {
+                    this.score++;
+                    btn.className = "w-full p-3 text-left bg-success/20 border border-success text-success rounded-lg font-bold";
+                    fb.innerText = "¡Correcto! +50 XP";
+                    fb.classList.add('bg-success/10', 'text-success');
+                    nav.updateXP(50);
+                } else {
+                    btn.className = "w-full p-3 text-left bg-danger/20 border border-danger text-danger rounded-lg";
+                    fb.innerText = "Incorrecto";
+                    fb.classList.add('bg-danger/10', 'text-danger');
+                }
+
+                setTimeout(() => {
+                    this.curr++;
+                    if(this.curr < DB.quiz.length) this.render();
+                    else this.end();
+                }, 1500);
+            },
+            end() {
+                document.getElementById('quizGameArea').classList.add('hidden');
+                document.getElementById('quizResultArea').classList.remove('hidden');
+                document.getElementById('finalXP').innerText = `Total Ganado: ${this.score * 50} XP`;
+            }
+        };
+
+        // --- BOOTSTRAP ---
+        window.addEventListener('DOMContentLoaded', () => {
+            nav.init();
+            conductLab.init();
+            resLab.init();
+            drudeSim.init();
+            jouleLab.init();
+            historyLab.init();
+            quiz.init();
+            
+            // Mobile Menu Toggle
+            document.getElementById('mobileMenuBtn').onclick = () => {
+                const s = document.querySelector('aside');
+                s.classList.toggle('hidden');
+                s.classList.toggle('fixed');
+                s.classList.toggle('inset-0');
+            };
+        });
+    </script>
+</body>
+</html>
